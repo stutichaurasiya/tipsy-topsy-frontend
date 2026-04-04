@@ -1,0 +1,153 @@
+/* =========================================
+   TimelineSection — Our Story Journey
+   ========================================= */
+
+.about__timeline-section {
+  background: linear-gradient(180deg, var(--vanilla) 0%, var(--blush) 100%);
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about__timeline-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--caramel), transparent);
+}
+
+/* ── Header ── */
+.about__timeline-header {
+  text-align: center;
+  margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about__timeline-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--espresso);
+  line-height: 1.2;
+}
+
+/* ── Vertical Line ── */
+.about__timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about__timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--caramel), rgba(196, 137, 79, 0.1));
+  transform: translateX(-50%);
+}
+
+/* ── Item ── */
+.about__tl-item {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: start;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+/* ── Dot ── */
+.about__tl-dot {
+  width: 18px;
+  height: 18px;
+  background: var(--caramel);
+  border-radius: 50%;
+  border: 3px solid var(--vanilla);
+  box-shadow: 0 0 0 4px rgba(196, 137, 79, 0.2);
+  margin: 6px auto 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.about__tl-item:hover .about__tl-dot {
+  transform: scale(1.35);
+}
+
+/* ── Content Sides ── */
+.about__tl-content {
+  padding: 0 28px;
+}
+
+.about__tl-item.left .about__tl-content {
+  text-align: right;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.about__tl-item.right .about__tl-content {
+  text-align: left;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.about__tl-item.left  .about__tl-dot { grid-column: 2; grid-row: 1; }
+.about__tl-item.right .about__tl-dot { grid-column: 2; grid-row: 1; }
+
+.about__tl-year {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--caramel);
+  opacity: 0.4;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.about__tl-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--espresso);
+  margin-bottom: 8px;
+}
+
+.about__tl-desc {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--light-mocha);
+  font-weight: 300;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .about__timeline::before {
+    left: 20px;
+  }
+  .about__tl-item {
+    grid-template-columns: 40px 1fr;
+  }
+  .about__tl-item.left .about__tl-content,
+  .about__tl-item.right .about__tl-content {
+    text-align: left;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 0 0 16px;
+  }
+  .about__tl-item.left  .about__tl-dot,
+  .about__tl-item.right .about__tl-dot {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 6px 0 0 11px;
+  }
+}
+
+@media (max-width: 560px) {
+  .about__timeline-section {
+    padding: 70px 24px;
+  }
+}

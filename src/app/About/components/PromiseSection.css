@@ -1,0 +1,61 @@
+/* =========================================
+   PromiseSection — Closing quote block
+   ========================================= */
+
+.about__promise {
+  background: linear-gradient(160deg, var(--blush) 0%, var(--cream) 100%);
+  padding: 110px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.about__promise::before {
+  content: "🎂";
+  position: absolute;
+  font-size: 20rem;
+  opacity: 0.04;
+  top: -40px;
+  right: -60px;
+  pointer-events: none;
+  animation: floatDeco 10s ease-in-out infinite;
+}
+
+.about__promise-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.about__promise-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--espresso);
+  line-height: 1.3;
+  margin: 16px 0 28px;
+}
+
+.about__promise-text {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--light-mocha);
+  font-weight: 300;
+  margin-bottom: 32px;
+}
+
+.about__promise-sign {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--mocha);
+}
+
+/* ── Responsive ── */
+@media (max-width: 560px) {
+  .about__promise {
+    padding: 70px 24px;
+  }
+}

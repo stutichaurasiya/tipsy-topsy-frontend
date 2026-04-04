@@ -1,0 +1,102 @@
+/* =========================================
+   ValuesSection — 4-card "Why Choose Us"
+   ========================================= */
+
+.about__values {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 110px 40px;
+}
+
+.about__values-header {
+  text-align: center;
+  margin-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about__values-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--espresso);
+  max-width: 600px;
+  line-height: 1.2;
+}
+
+/* ── Grid ── */
+.about__values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ── Card ── */
+.about__value-card {
+  background: linear-gradient(160deg, #fff8f0, var(--blush));
+  border: 1px solid var(--cream);
+  border-radius: 24px;
+  padding: 38px 28px;
+  text-align: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.about__value-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--caramel) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  border-radius: 24px;
+}
+
+.about__value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 24px 60px rgba(140, 90, 60, 0.12);
+}
+
+.about__value-card:hover::before {
+  opacity: 0.04;
+}
+
+.about__value-emoji {
+  font-size: 2.6rem;
+  margin-bottom: 18px;
+  display: block;
+  animation: emojiFloat 5s ease-in-out infinite;
+}
+
+.about__value-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--espresso);
+  margin-bottom: 12px;
+}
+
+.about__value-desc {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--light-mocha);
+  font-weight: 300;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .about__values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .about__values-grid {
+    grid-template-columns: 1fr;
+  }
+  .about__values {
+    padding: 70px 24px;
+  }
+}
