@@ -57,6 +57,39 @@ const SOLO_ITEMS = [
   { label: "Hampers", href: "#" },
 ];
 
+function CakeIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 120 130"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ flexShrink: 0 }}
+    >
+      {/* Base tier */}
+      <rect x="8" y="82" width="104" height="34" rx="6" fill="#8C5A3C" />
+      {/* Top tier */}
+      <rect x="22" y="54" width="76" height="28" rx="6" fill="#C4894F" />
+      {/* Frosting drip */}
+      <path
+        d="M22 62 Q32 52 42 62 Q52 52 62 62 Q72 52 82 62 Q92 52 98 62 L98 54 L22 54Z"
+        fill="#E3CAA5"
+      />
+      {/* Candle */}
+      <rect x="55" y="38" width="10" height="16" rx="3" fill="#E3CAA5" />
+      {/* Flame outer */}
+      <ellipse cx="60" cy="33" rx="5" ry="7" fill="#C4894F" />
+      {/* Flame inner */}
+      <ellipse cx="60" cy="35" rx="2.5" ry="4" fill="#F5ECD7" />
+      {/* Dots on base tier */}
+      <circle cx="30" cy="99" r="4" fill="#E3CAA5" />
+      <circle cx="50" cy="99" r="4" fill="#E3CAA5" />
+      <circle cx="70" cy="99" r="4" fill="#E3CAA5" />
+      <circle cx="90" cy="99" r="4" fill="#E3CAA5" />
+    </svg>
+  );
+}
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -91,10 +124,10 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="header-right">
-          <div className="support">
-            <strong>24/7 Support</strong>
-            +91 9876543210
-          </div>
+          <Link href="/About" className="about-nav-link">
+            <CakeIcon />
+            About Us
+          </Link>
 
           <div className="icons">
             <Link href="/account" className="icon-btn" title="Account">
