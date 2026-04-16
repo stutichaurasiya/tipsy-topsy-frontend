@@ -1,10 +1,11 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// 🔹 Get all products
-export async function fetchProducts() {
-  const res = await fetch(`${BASE_URL}/api/products`, {
-    cache: "no-store",
-  });
 
-  return res.json();
-}
+// src/lib/api.js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api',
+  withCredentials: true,
+});
+
+export default api;

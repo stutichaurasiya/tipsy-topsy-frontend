@@ -1,130 +1,94 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import styles from "./home.module.css";
+import { productService } from "@/services/product.service";
 
-// ── Cake Data ────────────────────────────────────────────────
-const CATEGORIES = [
-  {
-    id: "regular",
-    label: "Cakes",
-    heading: "Regular Cakes",
-    emoji: "🎂",
-    accent: "#C4894F",
-    items: [
-      { name: "Classic Vanilla Sponge", price: 649, weight: "0.5 kg", tag: "Bestseller", bg: "#fef6ec" },
-      { name: "Dark Chocolate Truffle", price: 799, weight: "0.5 kg", tag: "Popular", bg: "#f5ede4" },
-      { name: "Butterscotch Delight", price: 699, weight: "0.5 kg", tag: null, bg: "#fdf3e0" },
-      { name: "Red Velvet Classic", price: 849, weight: "0.5 kg", tag: "New", bg: "#fdecea" },
-      { name: "Black Forest Gateau", price: 749, weight: "0.5 kg", tag: "Loved", bg: "#f0ede8" },
-      { name: "Strawberry Fresh Cream", price: 799, weight: "0.5 kg", tag: null, bg: "#fef0f2" },
-    ],
-  },
-  {
-    id: "designer",
-    label: "Designer",
-    heading: "Designer Cakes",
-    emoji: "✨",
-    accent: "#8C5A3C",
-    items: [
-      { name: "Floral Fantasy Cake", price: 1499, weight: "1 kg", tag: "Trending", bg: "#fef0f5" },
-      { name: "Galaxy Mirror Glaze", price: 1899, weight: "1 kg", tag: "Exclusive", bg: "#ede8f5" },
-      { name: "Ombre Ruffle Cake", price: 1699, weight: "1 kg", tag: null, bg: "#fdeef5" },
-      { name: "Geode Crystal Cake", price: 2199, weight: "1 kg", tag: "Premium", bg: "#eef0fd" },
-      { name: "Hand Painted Floral", price: 1999, weight: "1 kg", tag: null, bg: "#fef6ec" },
-      { name: "Marble Fondant Cake", price: 1599, weight: "1 kg", tag: "New", bg: "#f5f0eb" },
-    ],
-  },
-  {
-    id: "photo",
-    label: "Photo",
-    heading: "Photo Cakes",
-    emoji: "📸",
-    accent: "#C4894F",
-    items: [
-      { name: "Custom Photo Print", price: 899, weight: "0.5 kg", tag: "Popular", bg: "#fef6ec" },
-      { name: "Edible Image Round", price: 999, weight: "1 kg", tag: null, bg: "#f0f5fe" },
-      { name: "Square Photo Cake", price: 1099, weight: "1 kg", tag: "Trending", bg: "#f5feee" },
-      { name: "Heart Photo Cake", price: 1199, weight: "1 kg", tag: "Loved", bg: "#fdeef5" },
-      { name: "Collage Photo Cake", price: 1299, weight: "1 kg", tag: null, bg: "#fef0ec" },
-      { name: "HD Printed Fondant", price: 1499, weight: "1 kg", tag: "New", bg: "#eef5fd" },
-    ],
-  },
-  {
-    id: "wedding",
-    label: "Wedding",
-    heading: "Wedding Cakes",
-    emoji: "💍",
-    accent: "#8C5A3C",
-    items: [
-      { name: "3-Tier Ivory Fondant", price: 4999, weight: "3 kg", tag: "Premium", bg: "#fefaea" },
-      { name: "Floral Cascade Tier", price: 5999, weight: "4 kg", tag: "Bestseller", bg: "#fef0f5" },
-      { name: "Royal Gold Drip Cake", price: 6499, weight: "4 kg", tag: "Exclusive", bg: "#fef6ec" },
-      { name: "Rustic Naked Cake", price: 3999, weight: "3 kg", tag: "Trending", bg: "#f5ede4" },
-      { name: "Pearl & Lace Fondant", price: 7999, weight: "5 kg", tag: null, bg: "#f0f0f5" },
-      { name: "Blush Floral Tower", price: 8999, weight: "6 kg", tag: "Luxury", bg: "#fdeef5" },
-    ],
-  },
-  {
-    id: "birthday",
-    label: "Birthday",
-    heading: "Birthday Cakes",
-    emoji: "🎉",
-    accent: "#C4894F",
-    items: [
-      { name: "Rainbow Surprise Cake", price: 849, weight: "0.5 kg", tag: "Kids Fav", bg: "#fff0f5" },
-      { name: "Unicorn Dream Cake", price: 1299, weight: "1 kg", tag: "Trending", bg: "#f5f0ff" },
-      { name: "Number Pinata Cake", price: 1499, weight: "1.5 kg", tag: "Popular", bg: "#fff5e0" },
-      { name: "Chocolate Bomb Cake", price: 999, weight: "0.5 kg", tag: "Viral", bg: "#f5ede4" },
-      { name: "Cartoon Theme Cake", price: 1199, weight: "1 kg", tag: null, bg: "#e8f5fe" },
-      { name: "Confetti Burst Cake", price: 799, weight: "0.5 kg", tag: "Bestseller", bg: "#fef6ec" },
-    ],
-  },
-  {
-    id: "anniversary",
-    label: "Anniversary",
-    heading: "Anniversary Cakes",
-    emoji: "🌸",
-    accent: "#8C5A3C",
-    items: [
-      { name: "Red Rose Heart Cake", price: 1099, weight: "1 kg", tag: "Romantic", bg: "#fdeef5" },
-      { name: "Golden Anniversary Tier", price: 2999, weight: "2 kg", tag: "25th Special", bg: "#fef6ec" },
-      { name: "Silver Fondant Couple", price: 1899, weight: "1.5 kg", tag: null, bg: "#f0f0f5" },
-      { name: "Forever & Always Cake", price: 1299, weight: "1 kg", tag: "Popular", bg: "#fff0f5" },
-      { name: "Champagne Drip Cake", price: 1599, weight: "1 kg", tag: "Trending", bg: "#fef6ec" },
-      { name: "Love Story Photo Cake", price: 1199, weight: "1 kg", tag: null, bg: "#fdeef5" },
-    ],
-  },
-  {
-    id: "occasions",
-    label: "Occasions",
-    heading: "By Occasions",
-    emoji: "🎀",
-    accent: "#C4894F",
-    items: [
-      { name: "Valentine Heart Cake", price: 999, weight: "0.5 kg", tag: "Feb Special", bg: "#fdeef5" },
-      { name: "Mother's Day Bouquet", price: 1199, weight: "1 kg", tag: "Seasonal", bg: "#f5feee" },
-      { name: "Baby Shower Blue", price: 1099, weight: "1 kg", tag: "Cute", bg: "#e8f5fe" },
-      { name: "Diwali Special Mithai", price: 899, weight: "0.5 kg", tag: "Festival", bg: "#fef6ec" },
-      { name: "Raksha Bandhan Cake", price: 749, weight: "0.5 kg", tag: "Seasonal", bg: "#fef0f5" },
-      { name: "New Year Countdown", price: 1299, weight: "1 kg", tag: "Party", bg: "#f0eefe" },
-    ],
-  },
-];
-
+// ── Static Data (UI ke liye — products backend se aayenge) ───
 const OFFERS = [
-  { label: "Free Delivery", sub: "on orders above ₹599", icon: "🚚" },
-  { label: "Same Day Delivery", sub: "order before 12 PM", icon: "⚡" },
-  { label: "100% Eggless", sub: "all cakes available", icon: "🌿" },
-  { label: "5-Star Rated", sub: "10,000+ happy customers", icon: "⭐" },
+  { label: "Free Delivery",     sub: "on orders above ₹599",   icon: "🚚" },
+  { label: "Same Day Delivery", sub: "order before 12 PM",      icon: "⚡" },
+  { label: "100% Eggless",      sub: "all cakes available",     icon: "🌿" },
+  { label: "5-Star Rated",      sub: "10,000+ happy customers", icon: "⭐" },
 ];
 
-// ── Emoji placeholders for cakes ──
+// Har category ka accent color aur emoji map
+// backend mein jo category name hai usse match hoga (case-insensitive)
+const CATEGORY_META = {
+  regular:     { emoji: "🎂", accent: "#C4894F", label: "Cakes",       heading: "Regular Cakes" },
+  designer:    { emoji: "✨", accent: "#8C5A3C", label: "Designer",    heading: "Designer Cakes" },
+  photo:       { emoji: "📸", accent: "#C4894F", label: "Photo",       heading: "Photo Cakes" },
+  wedding:     { emoji: "💍", accent: "#8C5A3C", label: "Wedding",     heading: "Wedding Cakes" },
+  birthday:    { emoji: "🎉", accent: "#C4894F", label: "Birthday",    heading: "Birthday Cakes" },
+  anniversary: { emoji: "🌸", accent: "#8C5A3C", label: "Anniversary", heading: "Anniversary Cakes" },
+  occasions:   { emoji: "🎀", accent: "#C4894F", label: "Occasions",   heading: "By Occasions" },
+};
+
+// Fallback — agar category ka koi meta na mile toh yeh use hoga
+const DEFAULT_META = { emoji: "🎂", accent: "#C4894F" };
+
 const CAKE_EMOJIS = ["🎂","🍰","🧁","🎂","🍰","🧁"];
 
+// ── Product Card ─────────────────────────────────────────────
+// Ek product ka card — real backend data se banta hai
+function ProductCard({ product, accent, index }) {
+  // Backend se image_url aata hai product_images array mein
+  const imageUrl = product.product_images?.[0]?.image_url || null;
+
+  return (
+    <div className={styles.cakeCard} style={{ "--card-accent": accent }}>
+
+      {/* Tag — backend mein nahi hai toh null rakhenge, ya baad mein add kar sakte ho */}
+      {/* Abhi ke liye koi tag nahi — UI same rahega */}
+
+      <div
+        className={styles.cardImg}
+        style={{ background: "#fef6ec" }}
+      >
+        {/* Agar real image hai toh dikhao, warna emoji fallback */}
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={product.name}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              position: "absolute",
+              inset: 0,
+            }}
+          />
+        ) : (
+          <span className={styles.cardImgEmoji}>
+            {CAKE_EMOJIS[index % 6]}
+          </span>
+        )}
+        <div className={styles.cardImgOverlay} />
+      </div>
+
+      <div className={styles.cardBody}>
+        <h3 className={styles.cardName}>{product.name}</h3>
+        {/* Backend mein weight field nahi hai — description ka short version dikhayenge */}
+        <p className={styles.cardWeight}>
+          {product.description
+            ? product.description.slice(0, 30) + (product.description.length > 30 ? "…" : "")
+            : "Freshly handcrafted"}
+        </p>
+        <div className={styles.cardFooter}>
+          <span className={styles.cardPrice}>₹{Number(product.price).toLocaleString("en-IN")}</span>
+          <button className={styles.cardBtn} style={{ background: accent }}>
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Category Section ─────────────────────────────────────────
-function CategorySection({ cat }) {
+// Ek category ka poora section — uske products ka horizontal scroll
+function CategorySection({ cat, products }) {
   const scrollRef = useRef(null);
-  const [canLeft, setCanLeft] = useState(false);
+  const [canLeft,  setCanLeft]  = useState(false);
   const [canRight, setCanRight] = useState(true);
 
   const checkScroll = () => {
@@ -145,7 +109,7 @@ function CategorySection({ cat }) {
           <span className={styles.catEmoji}>{cat.emoji}</span>
           <div>
             <h2 className={styles.catTitle}>{cat.heading}</h2>
-            <p className={styles.catSub}>{cat.items.length} varieties available</p>
+            <p className={styles.catSub}>{products.length} varieties available</p>
           </div>
         </div>
         <div className={styles.catHeaderRight}>
@@ -167,45 +131,112 @@ function CategorySection({ cat }) {
         </div>
       </div>
 
-      <div
-        className={styles.cardTrack}
-        ref={scrollRef}
-        onScroll={checkScroll}
-      >
-        {cat.items.map((item, i) => (
-          <div key={i} className={styles.cakeCard} style={{ "--card-accent": cat.accent }}>
-            {item.tag && (
-              <span className={styles.cardTag} style={{ background: cat.accent }}>
-                {item.tag}
-              </span>
-            )}
-            <div className={styles.cardImg} style={{ background: item.bg }}>
-              <span className={styles.cardImgEmoji}>{CAKE_EMOJIS[i % 6]}</span>
-              <div className={styles.cardImgOverlay} />
-            </div>
-            <div className={styles.cardBody}>
-              <h3 className={styles.cardName}>{item.name}</h3>
-              <p className={styles.cardWeight}>Starting {item.weight}</p>
-              <div className={styles.cardFooter}>
-                <span className={styles.cardPrice}>₹{item.price}</span>
-                <button className={styles.cardBtn} style={{ background: cat.accent }}>
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
+      <div className={styles.cardTrack} ref={scrollRef} onScroll={checkScroll}>
+        {products.map((product, i) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            accent={cat.accent}
+            index={i}
+          />
         ))}
       </div>
     </section>
   );
 }
 
+// ── Loading Skeleton ─────────────────────────────────────────
+// Jab tak backend se data aa raha hai tab yeh dikhega
+function LoadingSkeleton() {
+  return (
+    <div style={{ padding: "3rem 4rem" }}>
+      {[1, 2].map((s) => (
+        <div key={s} style={{ marginBottom: "3rem" }}>
+          <div style={{
+            width: 200, height: 28, background: "#e8d5b8",
+            borderRadius: 8, marginBottom: "1.5rem",
+            animation: "pulse 1.5s ease-in-out infinite"
+          }} />
+          <div style={{ display: "flex", gap: "1.2rem" }}>
+            {[1,2,3,4].map((c) => (
+              <div key={c} style={{
+                flex: "0 0 240px", height: 280, background: "#e8d5b8",
+                borderRadius: 20, animation: "pulse 1.5s ease-in-out infinite"
+              }} />
+            ))}
+          </div>
+        </div>
+      ))}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────
 export default function HomePage() {
-  const [visible, setVisible] = useState(false);
+  const [visible,    setVisible]    = useState(false);
+  const [categories, setCategories] = useState([]);  // Grouped categories
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState(null);
 
+  // Page fade-in animation
   useEffect(() => {
     setTimeout(() => setVisible(true), 80);
+  }, []);
+
+  // ✅ Backend se latest products fetch karo
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await productService.getLatest();  // GET /api/products/latest
+
+        // res.data.data — backend ne jo array bheja hai products ka
+        const products = res.data?.data || [];
+
+        // Products ko unki category ke basis pe group karo
+        // Har product mein categories object hota hai (include kiya tha repo mein)
+        const grouped = {};
+
+        products.forEach((product) => {
+          // Category name backend se aata hai — lowercase mein match karenge
+          const catName = product.categories?.name?.toLowerCase() || "other";
+
+          if (!grouped[catName]) {
+            grouped[catName] = [];
+          }
+          grouped[catName].push(product);
+        });
+
+        // Grouped object ko array mein convert karo rendering ke liye
+        const categoryArray = Object.entries(grouped).map(([name, items]) => {
+          const meta = CATEGORY_META[name] || {
+            ...DEFAULT_META,
+            label: name.charAt(0).toUpperCase() + name.slice(1),
+            heading: name.charAt(0).toUpperCase() + name.slice(1) + " Cakes",
+          };
+          return {
+            id: name,
+            ...meta,
+            items,
+          };
+        });
+
+        setCategories(categoryArray);
+      } catch (err) {
+        console.error("Products fetch error:", err);
+        setError("Products load nahi ho sake. Please refresh karein.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   return (
@@ -237,15 +268,9 @@ export default function HomePage() {
             <div className={styles.heroCakeEmoji}>🎂</div>
             <div className={styles.heroCakeGlow} />
           </div>
-          <div className={styles.heroBadge1}>
-            <span>⭐</span> 4.9 Rating
-          </div>
-          <div className={styles.heroBadge2}>
-            <span>🚚</span> Same Day
-          </div>
-          <div className={styles.heroBadge3}>
-            <span>🌿</span> Eggless
-          </div>
+          <div className={styles.heroBadge1}><span>⭐</span> 4.9 Rating</div>
+          <div className={styles.heroBadge2}><span>🚚</span> Same Day</div>
+          <div className={styles.heroBadge3}><span>🌿</span> Eggless</div>
         </div>
         <div className={styles.heroScrollHint}>
           <span>Explore our cakes</span>
@@ -266,23 +291,54 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* ── CATEGORY NAV ── */}
-      <div className={styles.catNav} id="cakes">
-        {CATEGORIES.map((c) => (
-          <a key={c.id} href={`#${c.id}`} className={styles.catNavItem}>
-            <span>{c.emoji}</span>
-            {c.label}
-          </a>
-        ))}
-      </div>
+      {/* ── CATEGORY NAV — dynamically backend data se banta hai ── */}
+      {!loading && categories.length > 0 && (
+        <div className={styles.catNav} id="cakes">
+          {categories.map((c) => (
+            <a key={c.id} href={`#${c.id}`} className={styles.catNavItem}>
+              <span>{c.emoji}</span>
+              {c.label}
+            </a>
+          ))}
+        </div>
+      )}
 
       {/* ── CAKE SECTIONS ── */}
       <div className={styles.sections}>
-        {CATEGORIES.map((cat) => (
+
+        {/* Loading state */}
+        {loading && <LoadingSkeleton />}
+
+        {/* Error state */}
+        {!loading && error && (
+          <div style={{
+            padding: "4rem",
+            textAlign: "center",
+            color: "#8c5a3c",
+            fontSize: "1rem"
+          }}>
+            ⚠️ {error}
+          </div>
+        )}
+
+        {/* ✅ Real products — backend se grouped by category */}
+        {!loading && !error && categories.map((cat) => (
           <div key={cat.id} id={cat.id}>
-            <CategorySection cat={cat} />
+            <CategorySection cat={cat} products={cat.items} />
           </div>
         ))}
+
+        {/* Agar koi product nahi aaya backend se */}
+        {!loading && !error && categories.length === 0 && (
+          <div style={{
+            padding: "4rem",
+            textAlign: "center",
+            color: "rgba(46,26,14,0.4)",
+            fontSize: "1rem"
+          }}>
+            Abhi koi product available nahi hai.
+          </div>
+        )}
       </div>
 
       {/* ── BANNER ── */}
