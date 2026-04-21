@@ -1,0 +1,333 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --cream:    #e3caa5;
+  --mocha:    #8c5a3c;
+  --vanilla:  #f5ecd7;
+  --caramel:  #c4894f;
+  --espresso: #2e1a0e;
+  --blush:    #f0d9be;
+  --white:    #fffdf9;
+}
+
+/* ── BASE ── */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5ecd7 0%, #eddfc8 60%, #e8d5b8 100%);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--espresso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.page.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Decorative background blobs — same as hero */
+.bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(196,137,79,0.13) 0%, transparent 50%),
+    radial-gradient(circle at 10% 80%, rgba(140,90,60,0.09) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* ── CONTAINER ── */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ── BRAND ── */
+.brand {
+  text-align: center;
+  animation: fadeUp 0.8s ease both;
+}
+
+.brandEmoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.4rem;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+}
+
+.brandName {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--espresso);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.brandSub {
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--caramel);
+  margin: 0.3rem 0 0;
+}
+
+/* ── CARD ── */
+.card {
+  width: 100%;
+  background: var(--white);
+  border-radius: 24px;
+  border: 1.5px solid rgba(196,137,79,0.15);
+  box-shadow: 0 20px 60px rgba(46,26,14,0.1);
+  overflow: hidden;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid rgba(196,137,79,0.12);
+  background: var(--vanilla);
+}
+
+.tab {
+  padding: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(46,26,14,0.45);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.25s;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 20%; right: 20%;
+  height: 2px;
+  background: var(--caramel);
+  border-radius: 2px 2px 0 0;
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.tabActive {
+  color: var(--mocha);
+  background: var(--white);
+}
+
+.tabActive::after {
+  transform: scaleX(1);
+}
+
+/* ── CARD HEADER ── */
+.cardHeader {
+  padding: 1.6rem 1.8rem 0;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--espresso);
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: rgba(46,26,14,0.5);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── FORM ── */
+.form {
+  padding: 1.4rem 1.8rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--espresso);
+  letter-spacing: 0.04em;
+}
+
+.optional {
+  font-weight: 300;
+  color: rgba(46,26,14,0.4);
+  font-size: 0.73rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid rgba(196,137,79,0.2);
+  background: var(--vanilla);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--espresso);
+  outline: none;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: rgba(46,26,14,0.3);
+  font-weight: 300;
+}
+
+.input:focus {
+  border-color: var(--caramel);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(196,137,79,0.12);
+}
+
+/* ── FORGOT PASSWORD ── */
+.forgot {
+  text-align: right;
+  margin-top: -0.4rem;
+}
+
+.forgotLink {
+  font-size: 0.76rem;
+  color: var(--caramel);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+.forgotLink:hover { color: var(--mocha); }
+
+/* ── ERROR / SUCCESS BOX ── */
+.errorBox {
+  background: #fff0f0;
+  border: 1px solid rgba(220,50,50,0.18);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.82rem;
+  color: #b91c1c;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.successBox {
+  background: #f0faf4;
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.82rem;
+  color: #15803d;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── SUBMIT BUTTON ── */
+.submitBtn {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, var(--mocha), var(--caramel));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(140,90,60,0.32);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── SWITCH MODE ── */
+.switchText {
+  text-align: center;
+  padding: 0 1.8rem 1.5rem;
+  font-size: 0.82rem;
+  color: rgba(46,26,14,0.5);
+  margin: 0;
+}
+
+.switchLink {
+  background: none;
+  border: none;
+  color: var(--caramel);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.2s;
+}
+.switchLink:hover { color: var(--mocha); }
+
+/* ── BACK HOME ── */
+.backHome {
+  font-size: 0.78rem;
+  color: rgba(46,26,14,0.45);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.backHome:hover { color: var(--mocha); }
+
+/* ── ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .page { padding: 1.5rem 1rem; align-items: flex-start; padding-top: 3rem; }
+  .card { border-radius: 20px; }
+  .cardHeader { padding: 1.3rem 1.4rem 0; }
+  .form { padding: 1.2rem 1.4rem 1.4rem; }
+  .switchText { padding: 0 1.4rem 1.2rem; }
+  .title { font-size: 1.6rem; }
+}

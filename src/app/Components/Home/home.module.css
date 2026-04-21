@@ -295,7 +295,7 @@
 }
 
 /* ══════════════════════════
-   CATEGORY NAV
+   CATEGORY NAV (sticky top tabs)
 ══════════════════════════ */
 .catNav {
   display: flex;
@@ -338,6 +338,123 @@
 }
 .catNavItem:hover { color: var(--mocha); }
 .catNavItem:hover::after { transform: scaleX(1); }
+
+/* ══════════════════════════
+   CATEGORY FILTER BAR (NEW)
+   Yeh catNav ke neeche, sections ke upar aata hai
+══════════════════════════ */
+.filterBar {
+  background: var(--vanilla);
+  border-bottom: 1px solid rgba(196,137,79,0.12);
+  padding: 1rem 4rem;
+}
+
+.filterBarInner {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+/* "Browse By" label */
+.filterBarLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,26,14,0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-right: 0.4rem;
+  border-right: 1.5px solid rgba(196,137,79,0.25);
+}
+
+/* Chips container */
+.filterChips {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Individual chip */
+.filterChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 1rem;
+  border-radius: 50px;
+  border: 1.5px solid rgba(196,137,79,0.25);
+  background: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: rgba(46,26,14,0.6);
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.2s ease,
+    box-shadow 0.22s ease;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  outline: none;
+}
+
+.filterChip:hover {
+  border-color: var(--caramel);
+  color: var(--mocha);
+  background: rgba(196,137,79,0.07);
+  transform: translateY(-1px);
+}
+
+/* Active chip — --chip-accent CSS variable use karega */
+.filterChipActive {
+  background: var(--chip-accent, var(--caramel));
+  border-color: var(--chip-accent, var(--caramel));
+  color: white !important;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(196,137,79,0.3);
+  transform: translateY(-1px);
+}
+
+.filterChipActive:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(196,137,79,0.35);
+}
+
+.filterChipEmoji {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.filterChipName {
+  line-height: 1;
+}
+
+/* Count badge chip ke andar */
+.filterChipCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.25);
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+/* Active nahi hone pe count ka color */
+.filterChip:not(.filterChipActive) .filterChipCount {
+  background: rgba(196,137,79,0.15);
+  color: var(--mocha);
+}
 
 /* ══════════════════════════
    SECTIONS
@@ -616,6 +733,7 @@
   .offerStrip { padding: 1rem 2rem; }
   .catNav { padding: 0 2rem; }
   .catSection { padding: 2.5rem 2rem 0; }
+  .filterBar { padding: 0.8rem 2rem; }
 }
 
 @media (max-width: 768px) {
@@ -642,10 +760,20 @@
   .cakeCard { flex: 0 0 200px; }
   .cardImg { height: 140px; }
   .cardImgEmoji { font-size: 4.5rem; }
+
+  /* Filter bar mobile */
+  .filterBar { padding: 0.75rem 1.2rem; }
+  .filterBarLabel { display: none; } /* Mobile pe label hide — space bachao */
+  .filterChips { gap: 0.45rem; }
+  .filterChip { padding: 0.38rem 0.8rem; font-size: 0.73rem; }
 }
 
 @media (max-width: 480px) {
   .offerStrip { grid-template-columns: 1fr; }
   .offerItem { border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.6rem 1rem; }
   .cakeCard { flex: 0 0 175px; }
+
+  /* Filter bar extra small */
+  .filterBar { padding: 0.6rem 1rem; }
+  .filterChip { padding: 0.35rem 0.7rem; font-size: 0.7rem; }
 }

@@ -2,59 +2,28 @@
 
 import "./Navbar.css";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";          // ✅ useEffect add kiya
+import { categoryService } from "@/services/category.service"; // ✅ category service import
 
-const NAV_ITEMS = [
-  {
-    label: "Cakes",
-    links: [
-      { name: "Regular Cakes", href: "#" },
-      { name: "Designer Cakes", href: "#" },
-      { name: "Photo Cakes", href: "#" },
-      { name: "Cheesecakes", href: "#" },
-    ],
-  },
-  {
-    label: "Wedding Season",
-    links: [
-      { name: "Wedding Cakes", href: "#" },
-      { name: "Engagement Cakes", href: "#" },
-    ],
-  },
-  {
-    label: "Designer Cakes",
-    links: [
-      { name: "Kids Cakes", href: "#" },
-      { name: "Luxury Cakes", href: "#" },
-    ],
-  },
-  {
-    label: "Birthday Cakes",
-    links: [
-      { name: "Kids Birthday", href: "#" },
-      { name: "Number Cakes", href: "#" },
-    ],
-  },
-  {
-    label: "Anniversary Cakes",
-    links: [
-      { name: "1st Anniversary", href: "#" },
-      { name: "25th Anniversary", href: "#" },
-    ],
-  },
-  {
-    label: "By Occasions",
-    links: [
-      { name: "Valentine Cakes", href: "#" },
-      { name: "Mother's Day Cakes", href: "#" },
-    ],
-  },
-];
+// ── Emoji map — category name ke basis pe emoji milega ──────
+// Backend mein jo category name hai usse lowercase mein match karenge
+const CATEGORY_EMOJI = {
+  regular:     "🎂",
+  designer:    "✨",
+  photo:       "📸",
+  wedding:     "💍",
+  birthday:    "🎉",
+  anniversary: "🌸",
+  occasions:   "🎀",
+  cheesecakes: "🍰",
+  kids:        "🧁",
+};
 
+// Solo links jo categories ke baad aate hain
 const SOLO_ITEMS = [
   { label: "Desserts", href: "#" },
-  { label: "Flowers", href: "#" },
-  { label: "Hampers", href: "#" },
+  { label: "Flowers",  href: "#" },
+  { label: "Hampers",  href: "#" },
 ];
 
 function CakeIcon() {
@@ -66,22 +35,12 @@ function CakeIcon() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ flexShrink: 0 }}
     >
-      {/* Base tier */}
-      <rect x="8" y="82" width="104" height="34" rx="6" fill="#8C5A3C" />
-      {/* Top tier */}
-      <rect x="22" y="54" width="76" height="28" rx="6" fill="#C4894F" />
-      {/* Frosting drip */}
-      <path
-        d="M22 62 Q32 52 42 62 Q52 52 62 62 Q72 52 82 62 Q92 52 98 62 L98 54 L22 54Z"
-        fill="#E3CAA5"
-      />
-      {/* Candle */}
+      <rect x="8"  y="82" width="104" height="34" rx="6" fill="#8C5A3C" />
+      <rect x="22" y="54" width="76"  height="28" rx="6" fill="#C4894F" />
+      <path d="M22 62 Q32 52 42 62 Q52 52 62 62 Q72 52 82 62 Q92 52 98 62 L98 54 L22 54Z" fill="#E3CAA5" />
       <rect x="55" y="38" width="10" height="16" rx="3" fill="#E3CAA5" />
-      {/* Flame outer */}
-      <ellipse cx="60" cy="33" rx="5" ry="7" fill="#C4894F" />
-      {/* Flame inner */}
+      <ellipse cx="60" cy="33" rx="5"   ry="7" fill="#C4894F" />
       <ellipse cx="60" cy="35" rx="2.5" ry="4" fill="#F5ECD7" />
-      {/* Dots on base tier */}
       <circle cx="30" cy="99" r="4" fill="#E3CAA5" />
       <circle cx="50" cy="99" r="4" fill="#E3CAA5" />
       <circle cx="70" cy="99" r="4" fill="#E3CAA5" />
@@ -91,8 +50,29 @@ function CakeIcon() {
 }
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [menuOpen,      setMenuOpen]      = useState(false);
+  const [openDropdown,  setOpenDropdown]  = useState(null);
+
+  // ✅ NAYA — Backend se categories store karenge yahan
+  const [categories, setCategories] = useState([]);
+
+  // ✅ NAYA — Component mount hote hi categories fetch karo
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await categoryService.getAll(); // GET /api/categories/all
+
+        // Backend response: res.data.data = [{id, name, description, products}, ...]
+        const cats = res.data?.data || [];
+        setCategories(cats);
+      } catch (err) {
+        console.error("Navbar: Categories fetch failed", err);
+        // Error aane pe bhi navbar toot nahi — sirf categories nahi dikhenge
+      }
+    };
+
+    fetchCategories();
+  }, []); // [] — sirf ek baar chalega jab navbar load ho
 
   const toggleMobileDropdown = (label) => {
     setOpenDropdown(openDropdown === label ? null : label);
@@ -128,12 +108,9 @@ export default function Navbar() {
             <CakeIcon />
             About Us
           </Link>
-
           <div className="icons">
-            <Link href="/account" className="icon-btn" title="Account">
-              👤
-            </Link>
-            <Link href="/cart" className="icon-btn" title="Cart">
+            <Link href="/account" className="icon-btn" title="Account">👤</Link>
+            <Link href="/cart"    className="icon-btn" title="Cart">
               🛍️
               <span className="badge">2</span>
             </Link>
@@ -146,9 +123,7 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          <span />
-          <span />
-          <span />
+          <span /><span /><span />
         </button>
       </div>
 
@@ -156,33 +131,64 @@ export default function Navbar() {
       <nav className={`menu-navbar ${menuOpen ? "active" : ""}`}>
         <ul className="menu">
 
-          {/* Dropdown items */}
-          {NAV_ITEMS.map((item) => (
+          {/*
+           * ✅ NAYA — Backend se aayi categories ka dropdown
+           * Pehle hardcoded NAV_ITEMS tha — ab yeh dynamically backend se banta hai
+           * Har category ek dropdown item ban jaati hai
+           */}
+          {categories.length > 0 && (
             <li
-              key={item.label}
-              className={`menu-item ${openDropdown === item.label ? "mobile-open" : ""}`}
+              className={`menu-item ${openDropdown === "allcakes" ? "mobile-open" : ""}`}
             >
               <button
                 className="menu-item-label"
-                onClick={() => toggleMobileDropdown(item.label)}
+                onClick={() => toggleMobileDropdown("allcakes")}
               >
-                {item.label}
+                🎂 All Cakes
                 <span className="chevron">▾</span>
               </button>
               <ul className="dropdown">
-                {item.links.map((link, i) => (
-                  <li key={link.name}>
-                    <Link href={link.href}>{link.name}</Link>
-                    {i < item.links.length - 1 && (
-                      <div className="dropdown-divider" />
-                    )}
-                  </li>
-                ))}
+                {categories.map((cat, i) => {
+                  // Emoji dhundho category name se
+                  const emoji = CATEGORY_EMOJI[cat.name?.toLowerCase()] || "🎂";
+                  return (
+                    <li key={cat.id}>
+                      {/* href mein category id daala — Home page pe scroll karega */}
+                      <Link href={`/#${cat.name?.toLowerCase()}`}>
+                        {emoji} {cat.name}
+                      </Link>
+                      {/* Last item ke baad divider nahi aayega */}
+                      {i < categories.length - 1 && (
+                        <div className="dropdown-divider" />
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </li>
-          ))}
+          )}
 
-          {/* Solo links */}
+          {/*
+           * ✅ NAYA — Har category ka apna bhi alag menu item
+           * "All Cakes" dropdown ke alawa individual links bhi dikhenge
+           * Jaise: Birthday, Wedding, Designer — har ek alag tab
+           */}
+          {categories.map((cat) => {
+            const emoji = CATEGORY_EMOJI[cat.name?.toLowerCase()] || "🎂";
+            const catKey = cat.name?.toLowerCase();
+            return (
+              <li
+                key={cat.id}
+                className={`menu-item ${openDropdown === catKey ? "mobile-open" : ""}`}
+              >
+                <Link href={`/#${catKey}`}>
+                  {emoji} {cat.name}
+                </Link>
+              </li>
+            );
+          })}
+
+          {/* Solo links — yeh hardcoded rehenge */}
           {SOLO_ITEMS.map((item) => (
             <li key={item.label}>
               <Link href={item.href}>{item.label}</Link>
